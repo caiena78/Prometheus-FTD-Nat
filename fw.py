@@ -79,7 +79,7 @@ class firewall:
         else:
             raise Exception("IP ADDRESS is not valid")        
         if not self.is_port_open(ipaddress,22):
-            raise Exception(f"Unable to connect to {ipaddress} on tcp/22")        
+            raise Exception(f"Unable to connect to {ipaddress} on tcp/22")               
         data=self.sendCMD(device,cmd)
         nat_data=self.dataparser(data)
         return nat_data

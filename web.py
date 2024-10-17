@@ -4,6 +4,8 @@ import base64
 import time
 import fw
 from waitress import serve
+from netmiko import NetMikoAuthenticationException
+
 
 
 
@@ -46,16 +48,19 @@ def requires_auth(f):
 @app.route('/metrics', methods=['GET'])
 @requires_auth
 def metrics():
-    # check that this is an ip address and we can connect to on on port 22
     target = request.args.get('target')
     auth = request.headers.get('Authorization')
     username, password = base64.b64decode(auth.split(' ')[1]).decode('utf-8').split(':')
+
     try:
         update_metrics(target,username,password)
+    except NetMikoAuthenticationException:
+        print("login failed")
+        return authenticate()
     except Exception as e:
         print(e)
         return jsonify({"error": e}), 400
-
+    loginsuccess=True
     return Response(generate_latest(), mimetype='text/plain')
 
 if __name__ == '__main__':
