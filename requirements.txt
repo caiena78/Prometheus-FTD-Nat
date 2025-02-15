@@ -1,0 +1,4 @@
+Flask==3.0.3
+netmiko==4.4.0
+prometheus_client==0.21.0
+waitress==3.0.0
